@@ -1,0 +1,67 @@
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
+import { FaCartPlus } from 'react-icons/fa'
+import { Items } from '../../store/items/types'
+
+import styles from './item.module.scss'
+import { useDispatch } from 'react-redux'
+import { changeFavorite } from '../../store/items/itemsSlice'
+
+const iconProps = {
+  size: 24,
+  color: '#041833',
+}
+
+type ItemProps = {
+  content: Items
+}
+
+export default function Item({ content }: ItemProps) {
+  const dispatch = useDispatch()
+
+  const { descricao, titulo, favorito, foto, preco, id } = content
+
+  function solveFavorite() {
+    dispatch(changeFavorite(id))
+  }
+
+  return (
+    <div className={styles.item}>
+      <div className={styles['item-imagem']}>
+        <img src={foto} alt={titulo} />
+      </div>
+
+      <div className={styles['item-descricao']}>
+        <div className={styles['item-titulo']}>
+          <h2>{titulo}</h2>
+          <p>{descricao}</p>
+        </div>
+
+        <div className={styles['item-info']}>
+          <div className={styles['item-preco']}>R$ {preco.toFixed(2)}</div>
+          <div className={styles['item-acoes']}>
+            {favorito ? (
+              <AiFillHeart
+                {...iconProps}
+                color="#ff0000"
+                className={styles['item-acao']}
+                onClick={solveFavorite}
+              />
+            ) : (
+              <AiOutlineHeart
+                {...iconProps}
+                className={styles['item-acao']}
+                onClick={solveFavorite}
+              />
+            )}
+
+            <FaCartPlus
+              {...iconProps}
+              color={true ? '#1875E8' : iconProps.color}
+              className={styles['item-acao']}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
