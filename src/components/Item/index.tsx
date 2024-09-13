@@ -3,8 +3,10 @@ import { FaCartPlus } from 'react-icons/fa'
 import { Items } from '../../store/items/types'
 
 import styles from './item.module.scss'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { changeFavorite } from '../../store/items/itemsSlice'
+import { changeCart } from '../../store/cart/cartSlice'
+import { ApplicationState } from '../../store'
 
 const iconProps = {
   size: 24,
@@ -16,12 +18,20 @@ type ItemProps = {
 }
 
 export default function Item({ content }: ItemProps) {
+  const { descricao, titulo, favorito, foto, preco, id } = content
+
   const dispatch = useDispatch()
 
-  const { descricao, titulo, favorito, foto, preco, id } = content
+  const beInCart = useSelector((state: ApplicationState) =>
+    state.cart.some((itemInCart) => itemInCart.id === id),
+  )
 
   function solveFavorite() {
     dispatch(changeFavorite(id))
+  }
+
+  function resolverCart() {
+    dispatch(changeCart(id))
   }
 
   return (
@@ -56,8 +66,9 @@ export default function Item({ content }: ItemProps) {
 
             <FaCartPlus
               {...iconProps}
-              color={true ? '#1875E8' : iconProps.color}
+              color={beInCart ? '#1875E8' : iconProps.color}
               className={styles['item-acao']}
+              onClick={resolverCart}
             />
           </div>
         </div>

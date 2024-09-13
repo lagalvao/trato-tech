@@ -3,6 +3,7 @@ import Logo from '../Icons/Logo'
 import styles from './navbar.module.scss'
 import { RiShoppingCart2Line, RiShoppingCartFill } from 'react-icons/ri'
 import Search from '../Search'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const iconProps = {
   color: 'white',
@@ -10,33 +11,36 @@ const iconProps = {
 }
 
 export default function Navbar() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   return (
     <nav className={styles.nav}>
-      <Logo className={styles.logo} />
+      <Logo className={styles.logo} onClick={() => navigate('/')} />
 
       <div className={styles.links}>
         <div>
-          <a
-            href="/"
+          <Link
+            to="/"
             className={classNames(styles.link, {
-              [styles.selected]: window.location.pathname === '/',
+              [styles.selected]: location.pathname === '/',
             })}
           >
             Página Inicial
-          </a>
+          </Link>
         </div>
       </div>
       <div className={styles.busca}>
         <Search />
       </div>
       <div className={styles.icones}>
-        <a href="/carrinho">
-          {window.location.pathname === '/carrinho' ? (
+        <Link to="/carrinho">
+          {location.pathname === '/carrinho' ? (
             <RiShoppingCartFill {...iconProps} />
           ) : (
             <RiShoppingCart2Line {...iconProps} />
           )}
-        </a>
+        </Link>
       </div>
     </nav>
   )
